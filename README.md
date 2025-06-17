@@ -1,4 +1,35 @@
 ### CRUD app using FastAPI 
+#### hosted on local using Docker
+
+#### Install Docker on local using wsl
+
+```
+sudo apt update
+sudo apt install -y docker.io docker-compose
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+#### Build and run this application
+
+```
+sudo docker build -t fastapi-crud .
+sudo docker run -d -p 8000:8000 fastapi-crud
+```
+
+##### Now the app is running at localhost:8000/users
+To see and test the API go to localhost:8000/docs
+
+
+---
+
+
+
+
+
+
+Old version:
+### CRUD app using FastAPI 
 ##### hosted on local using uvicorn
 ![CRUD Operation](https://github.com/user-attachments/assets/4816a8f8-b334-441c-93f3-2445cf4de909)
 ---
