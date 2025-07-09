@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.models import User
 from pydantic import BaseModel, EmailStr
+from app.auth import get_current_user
 
 router = APIRouter()
 
@@ -15,7 +16,7 @@ class UserOut(BaseModel):
         orm_mode = True
 
 @router.get("/{user_id}", response_model=UserOut)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     db_user = db.query(User).filter(User.id == user_id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
