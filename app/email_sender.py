@@ -3,10 +3,8 @@ import aiosmtplib
 import os
 from dotenv import load_dotenv
 
-# Load .env variables
 load_dotenv()
 
-# Environment Variables
 SMTP_HOST = os.getenv("SMTP_HOST", "smtp.office365.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
 SMTP_USER = os.getenv("SMTP_USER")

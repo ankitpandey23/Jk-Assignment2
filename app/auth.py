@@ -33,7 +33,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     email: str = payload.get("sub")
     if email is None:
         raise credentials_exception
-    # Hardcoded user for testing
+    
     if email == "admin@example.com":
         return {"email": "admin@example.com", "name": "admin"}
     user = db.query(User).filter(User.email == email).first()

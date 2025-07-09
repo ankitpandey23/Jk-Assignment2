@@ -18,7 +18,7 @@ app = FastAPI(title="User CRUD API")
 
 @app.post("/token")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    # Hardcoded test user
+  
     if form_data.username == ADMIN_EMAIL and form_data.password == ADMIN_PASSWORD:
         access_token = auth.create_access_token(data={"sub": ADMIN_EMAIL})
         return {"access_token": access_token, "token_type": "bearer"}

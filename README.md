@@ -1,4 +1,27 @@
+### FLOWCHART
 
+### References
+1. FastAPI:https://fastapi.tiangolo.com/
+Authentication Tutorial: https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
+Dependency Injection: https://fastapi.tiangolo.com/tutorial/dependencies/
+2. SQLAlchemy
+Docs for ORM (v2.0): https://docs.sqlalchemy.org/en/20/
+SQLite connection with SQLAlchemy: https://docs.sqlalchemy.org/en/20/dialects/sqlite.html
+3. for Authentication:
+Passlib Docs (Password hashing): https://passlib.readthedocs.io/en/stable/
+bcrypt:https://pypi.org/project/bcrypt/
+python-jose (JWT support): https://github.com/mpdavis/python-jose
+
+4. Additional implementation done 
+ i. Email Sending
+aiosmtplib Docs: https://aiosmtplib.readthedocs.io/en/stable/
+SMTP Setup for Office365: https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365
+python-dotenv Docs: https://saurabh-kumar.com/python-dotenv/
+for Package Management:
+https://pip.pypa.io/en/stable/cli/pip_freeze/
+venv: https://docs.python.org/3/library/venv.html
+ Uvicorn (ASGI server for FastAPI)
+Docs: https://www.uvicorn.org/
 ### CRUD app using FastAPI 
 #### hosted on local using Docker
 
