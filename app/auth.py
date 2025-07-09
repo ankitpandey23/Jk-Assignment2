@@ -1,25 +1,30 @@
 from datetime import datetime, timedelta
+import os
 from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Path
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError
 from sqlalchemy.orm import Session
 from app.models import User
 from .db import get_db
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
-SECRET_KEY = "your_secret_key_here"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
-ADMIN_EMAIL = "admin@example.com"
-ADMIN_PASSWORD = "admin"
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@gmail.com")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -27,26 +32,29 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    payload = auth.decode_access_token(token)
+    payload = decode_access_token(token)
     if payload is None:
         raise credentials_exception
     email: str = payload.get("sub")
     if email is None:
         raise credentials_exception
     
-    if email == "admin@example.com":
-        return {"email": "admin@example.com", "name": "admin"}
+    if email == ADMIN_EMAIL:
+        return {"email": ADMIN_EMAIL, "name": "admin"}
     user = db.query(User).filter(User.email == email).first()
     if user is None:
         raise credentials_exception
     return user
 
-def is_self_or_admin(user_id: int, current_user: User = Depends(get_current_user)):
+def is_self_or_admin(user_id: int = Path(...), current_user: User = Depends(get_current_user)):
     if current_user.email != ADMIN_EMAIL and current_user.id != user_id:
+        logger.info(f"Unauthorized access attempt by user {current_user.id} for user ID {user_id}")
+        print(f"Current user: {current_user.id}, User ID: {user_id}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to perform this action"
         )
+    logger.info(f"User {current_user.id} is authorized to access user ID {user_id}")
     return current_user
 
 def verify_password(plain_password, hashed_password):

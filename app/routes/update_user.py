@@ -16,7 +16,7 @@ def update_user(
     user_id: int,
     fields: UserUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(lambda: is_self_or_admin(user_id))
+    current_user: User = Depends(is_self_or_admin)
 ):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
